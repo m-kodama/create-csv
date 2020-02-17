@@ -92,11 +92,11 @@ function createRedBodyData(): string[][] {
 }
 
 async function main() {
-  const green101 = await createGreenData(101);
-  exportCSV(green101, "02_結合テスト_社員データ_101");
-  const green100 = green101.splice(0, green101.length - 1);
-  exportCSV(green100, "01_結合テスト_社員データ_100");
-  const redHeder = green100.splice(1, green100.length - 1);
+  const green100 = await createGreenData(101);
+  exportCSV(green100, "02_結合テスト_社員データ_100");
+  const green99 = green100.splice(0, green100.length - 1);
+  exportCSV(green99, "01_結合テスト_社員データ_99");
+  const redHeder = green99.splice(1, green99.length - 1);
   exportCSV(redHeder, "03_結合テスト_社員データ_ヘッダーエラー");
   const redBody = createRedBodyData();
   exportCSV(redBody, "04_結合テスト_社員データ_エラー");
