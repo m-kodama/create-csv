@@ -1,6 +1,7 @@
 import { l } from "./log";
 import { getName } from "./name_api";
 import * as fs from "fs";
+import { resolve } from "dns";
 
 const HEADER = [
   "社員コード",
@@ -92,14 +93,15 @@ function createRedBodyData(): string[][] {
 }
 
 async function main() {
-  const green2 = await createGreenData(100);
-  exportCSV(green2, "02_結合テスト_社員データ_100");
-  const green1 = green2.splice(0, green2.length - 1);
-  exportCSV(green1, "01_結合テスト_社員データ_99");
-  const redHeder = green1.splice(1, green1.length - 1);
-  exportCSV(redHeder, "03_結合テスト_社員データ_ヘッダーエラー");
+  const green = await createGreenData(150);
+  exportCSV(green, "10_結合テスト_社員データ_150");
+  HEADER.forEach((value, index) => {
+    const redHeder = JSON.parse(JSON.stringify(green));
+    redHeder[0][index] = "";
+    exportCSV(redHeder, `2${index}_結合テスト_社員データ_ヘッダーエラー_${value}`);
+  });
   const redBody = createRedBodyData();
-  exportCSV(redBody, "04_結合テスト_社員データ_エラー");
+  exportCSV(redBody, "30_結合テスト_社員データ_エラー");
 }
 
 l("start");
@@ -130,7 +132,7 @@ function exportCSV(content: string[][], fileName: string): void {
     }
     formatCSV += "\n";
   }
-  fs.writeFile(`${fileName}.csv`, formatCSV, "utf8", function(err) {
+  fs.writeFile(`csv/${fileName}.csv`, formatCSV, "utf8", function(err) {
     if (err) {
       l(`${fileName}.csvが保存できませんでした`);
     } else {
